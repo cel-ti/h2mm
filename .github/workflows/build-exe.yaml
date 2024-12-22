@@ -46,33 +46,21 @@ jobs:
       with:
         spec: "src/h2mm/__main__.py"
         requirements: "requirements.txt"
-        
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: h2mm-windows
-        path: dist/h2mm.exe
+        python_ver: '3.12'
+        options: --onefile --name "h2mm"
+        upload_exe_with_name: 'h2mm'
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v${{ github.run_number }}
-        release_name: Release v${{ github.run_number }}
+        name: Release v${{ github.run_number }}
+        files: h2mm.exe
         draft: false
         prerelease: false
-        
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./dist/h2mm.exe
-        asset_name: h2mm.exe
-        asset_content_type: application/octet-stream
 
     - name: Copy to root
       run: |
