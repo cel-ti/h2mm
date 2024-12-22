@@ -48,7 +48,11 @@ jobs:
         spec: "src/h2mm/__main__.py"
         requirements: "requirements.txt"
         python_ver: '3.12'
-        options: --onefile --name "h2mm" --paths "src/h2mm"
+        options: >-
+          --onefile 
+          --name "h2mm" 
+          --paths "src"
+          --add-data "src/h2mm:h2mm"
         upload_exe_with_name: 'h2mm'
 
     - name: Create Release
