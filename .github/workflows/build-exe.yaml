@@ -44,7 +44,7 @@ jobs:
     - name: Build with pyinstaller
       uses: sayyid5416/pyinstaller@v1
       with:
-        python-file: "src/h2mm/__main__.py"
+        spec: "src/h2mm/__main__.py"
         requirements: "requirements.txt"
         
     - name: Upload artifacts
