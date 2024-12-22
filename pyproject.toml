@@ -1,7 +1,7 @@
 [project]
 name = "h2mm"
 version = "0.1.0"
-description = "Add your description here"
+description = "Helldivers 2 Mod Manager"
 authors = [
     { name = "cel-ti", email = "96926560+cel-ti@users.noreply.github.com" }
 ]
