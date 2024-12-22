@@ -38,6 +38,7 @@ jobs:
         git config --local user.name "github-actions[bot]"
         git add requirements.txt
         git commit -m "Auto-generate requirements.txt"
+        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
         git push
 
     - name: Build with pyinstaller
@@ -83,3 +84,6 @@ jobs:
           git commit -m "Update h2mm.exe to repo"
           git push
         fi
+
+permissions:
+  contents: write
