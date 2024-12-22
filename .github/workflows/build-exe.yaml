@@ -21,20 +21,29 @@ jobs:
     - name: Install dependencies and generate requirements
       run: |
         python -m pip install --upgrade pip
-        # Create requirements.txt from dependencies in pyproject.toml
-        echo "click>=8.1.7" > requirements.txt
-        echo "toml>=0.10.2" >> requirements.txt
-        echo "rarfile>=4.2" >> requirements.txt
-        echo "wcwidth>=0.2.13" >> requirements.txt
-        echo "tabulate>=0.9.0" >> requirements.txt
-        pip install -r requirements.txt
-        pip install .
-        pip install pyinstaller
-        
+        # Install toml parser
+        pip install toml
+        # Generate requirements.txt from pyproject.toml dependencies
+        python -c "
+        import toml
+        with open('pyproject.toml', 'r') as f:
+            data = toml.load(f)
+        with open('requirements.txt', 'w') as f:
+            f.write('\n'.join(data['project']['dependencies']))
+        "
+
+    - name: Commit requirements.txt
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git add requirements.txt
+        git commit -m "Auto-generate requirements.txt"
+        git push
+
     - name: Build with pyinstaller
       uses: sayyid5416/pyinstaller@v1
       with:
-        spec: "h2mm.spec"
+        python-file: "src/h2mm/__main__.py"
         requirements: "requirements.txt"
         
     - name: Upload artifacts
@@ -63,3 +72,14 @@ jobs:
         asset_path: ./dist/h2mm.exe
         asset_name: h2mm.exe
         asset_content_type: application/octet-stream
+
+    - name: Copy to root
+      run: |
+        if [ -f "./dist/h2mm.exe" ]; then
+          cp ./dist/h2mm.exe ./release/h2mm.exe
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add release/h2mm.exe
+          git commit -m "Update h2mm.exe to repo"
+          git push
+        fi
