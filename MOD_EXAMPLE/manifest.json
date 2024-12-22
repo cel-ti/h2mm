@@ -1,0 +1,12 @@
+{
+    "name" : "Example Mod",
+    "description" : "This is an example mod",
+    "overwrites" : [
+        "CM-09"
+    ],
+    "ignorable-overwrites" : [
+        "CM-10"
+    ],
+    "replaceBase" : false,
+    "patchNumPriority" : 0
+}
