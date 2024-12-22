@@ -58,20 +58,22 @@ jobs:
       with:
         tag_name: v${{ github.run_number }}
         name: Release v${{ github.run_number }}
-        files: h2mm.exe
+        files: ./dist/h2mm.exe
         draft: false
         prerelease: false
 
-    - name: Copy to root
+    - name: Copy to release folder
+      shell: pwsh
       run: |
-        if [ -f "./dist/h2mm.exe" ]; then
-          cp ./dist/h2mm.exe ./release/h2mm.exe
+        if (Test-Path "./dist/h2mm.exe") {
+          New-Item -ItemType Directory -Force -Path "release"
+          Copy-Item "./dist/h2mm.exe" -Destination "release/h2mm.exe"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add release/h2mm.exe
           git commit -m "Update h2mm.exe to repo"
           git push
-        fi
+        }
 
 permissions:
   contents: write
