@@ -2,6 +2,7 @@ name: Build Executable
 
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - 'pyproject.toml'
